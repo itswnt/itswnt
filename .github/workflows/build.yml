@@ -1,0 +1,29 @@
+name: Build iPhone IPA
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate project
+        run: xcodegen generate
+      - name: Build for iPhone
+        run: xcodebuild -project FNAF.xcodeproj -scheme FNAF -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath build CODE_SIGNING_ALLOWED=NO build
+      - name: Package unsigned IPA
+        run: |
+          mkdir -p output/Payload
+          cp -R build/Build/Products/Release-iphoneos/FNAF.app output/Payload/
+          test -f output/Payload/FNAF.app/FNAF
+          test -f output/Payload/FNAF.app/Web/index.html
+          cd output
+          zip -qr Five-Nights-at-Freddys-unsigned.ipa Payload
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Five-Nights-at-Freddys-IPA
+          path: output/Five-Nights-at-Freddys-unsigned.ipa
+          if-no-files-found: error
