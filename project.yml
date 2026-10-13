@@ -14,7 +14,7 @@ targets:
         buildPhase: resources
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.mykid101511.fnaf
+        PRODUCT_BUNDLE_IDENTIFIER: com.freddygame.fnaf
         INFOPLIST_FILE: App/Info.plist
         SWIFT_VERSION: "5.0"
         TARGETED_DEVICE_FAMILY: "1"
